@@ -1,0 +1,75 @@
+<launch>
+
+  <!-- Run jaco_driver_cpp.. works with newer kinova api from wherever -->
+  <arg name="control" default="software"/>
+  <node name="jaco_driver_cpp" pkg="jaco_driver_cpp" type="main" cwd="node" args="$(arg control)" output="screen"/>
+    
+  <!-- By default, we do not start a database (it can be large) -->
+  <arg name="db" default="false" />
+
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+
+  <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
+  <include file="$(find jaco_moveit_config)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="true"/>
+  </include>
+
+
+
+  <!-- We do not have a robot connected, so publish fake joint states -->
+  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="/use_gui" value="false"/>
+    <rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam>
+  </node> -->
+ 
+
+
+
+ 
+<node pkg="tf" type="static_transform_publisher" name="camera2robot" args="-0.497277, 0.525894, 0.136739, 0.015065, 0.808754, -0.586207, 0.045296  camera_depth_optical_frame root 100"/>
+
+
+
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+
+
+  <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
+  <include file="$(find jaco_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>  
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+
+  </include>
+
+  <!-- Run Rviz and load the default config to see the state of the move_group node -->
+  <include file="$(find jaco_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+  <!-- If database loading was enabled, start mongodb as well -->
+  <include file="$(find jaco_moveit_config)/launch/default_warehouse_db.launch" if="$(arg db)"/>
+
+  <!-- Use jaco joint names instead of standards -->
+  <rosparam command="load" file="$(find jaco_moveit_config)/config/joint_names.yaml"/>
+
+ <!-- Run jaco move arm -->
+  <node name="mrs_jaco_pose" pkg="mrs_jaco_move" type="mrs_jaco_pose" cwd="node" output="screen"/>
+
+  
+  <!-- Load jaco additional parameters (example, not used for now) -->
+  <!--
+  <rosparam command="load" file="$(find jaco_moveit_config)/config/jaco_additional_config_example.yaml" param="/jaco_driver_cpp" />
+  -->
+
+  <!-- Set dynamic_reconfigure parameters from file -->
+  <node name="dynparam_set" pkg="dynamic_reconfigure" type="dynparam" args="load /jaco_driver_cpp $(find jaco_moveit_config)/config/default_parameters.yaml -t 15"/>
+
+ 
+</launch>
+
+
