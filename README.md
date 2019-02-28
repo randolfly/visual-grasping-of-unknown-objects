@@ -1,6 +1,7 @@
 # visual-grasping-of-unknown-objects
 The novelty of the project is that the study has led to questioning the general approach used by researchers to solve the grasping problem.
-###################################### SHAF##################################################
+
+## SHAF(Symmetry height accumulated features) ##
 roslaunch openni_launch openni.launch
 
 rosrun trigger trigger2.py
@@ -25,7 +26,7 @@ NOTE::
 			       float y_min=-0.95, float y_max=0.05, float z_min=0.11, float z_max = 0.95);// in terms of root coordinate system 
 
 
-######################################Grasping rectangle##################################################
+## Grasping rectangle ##
 
  roslaunch openni_launch openni.launch
  
@@ -48,8 +49,7 @@ roslaunch jaco_moveit_config youbot_kinect.launch
 rosrun mrs_jaco_move mrs_jaco_grasp
 
 
-
-########################################  PCA  #########################################################
+##  PCA  ##
 
 roslaunch openni_launch openni.launch
 
@@ -62,7 +62,7 @@ rosrun mrs_jaco_move mrs_jaco_grasp
 
 rostopic pub /SS/doSingleShot std_msgs/String "asdf" -r 0.2
 
-########################################## Calibration #######################################################
+## Calibration ##
 
 catkin make all these 5 packages
 jaco_description, jaco_driver_cpp, jaco_moveit_config, jaco_cpp_lib, jaco_kinect_calib_pkg
@@ -75,7 +75,7 @@ Step 2:
 rosrun jaco_kinect_calib_pkg jaco_kinect_calib
 
 
-########################################### TEST CALIBRATION ##################################################################
+## TEST CALIBRATION ##
 
 => roslaunch openni_launch openni.launch
 =>rosrun kinect_grab_frame kinect_grab_frame test1.pcd
@@ -88,4 +88,4 @@ rosrun jaco_kinect_calib_pkg jaco_kinect_calib
 =>rosrun check_calib check_calib
 
 
-####################################################################################################################################2
+
