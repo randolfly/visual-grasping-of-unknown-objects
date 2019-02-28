@@ -1,9 +1,9 @@
 # visual-grasping-of-unknown-objects
-
-link to paper: https://aaltodoc.aalto.fi/bitstream/handle/123456789/23162/master_John_Bensam_Christina_2016.pdf?sequence=2&isAllowed=y
-
-
 The novelty of the project is that the study has led to questioning the general approach used by researchers to solve the grasping problem.
+
+Link 1 Paper: https://aaltodoc.aalto.fi/handle/123456789/23162
+
+Link 2 Paper :http://www.diva-portal.org/smash/record.jsf?pid=diva2%3A1046747&dswid=-5928
 
 ## SHAF(Symmetry height accumulated features) ##
 roslaunch openni_launch openni.launch
